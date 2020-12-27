@@ -11,7 +11,9 @@
 #include "FS.h"
 #include <SD.h>
 #include <BluetoothSerial.h>
- 
+
+#define SERIAL_SIZE_RX  1024
+
 BluetoothSerial SerialBT;
 GPSAnalyse GPS;
 
@@ -55,9 +57,10 @@ void setup() {
 	  Serial.printf("SDCard Type = %d \r\n",Type);
 	  Serial.printf("SDCard Size = %d \r\n" , (int)(SD.cardSize()/1024/1024));
 
-    M5.dis.fillpix(0x00004f);
+    M5.dis.drawpix(0,0x00004f);
     
     Serial1.begin(9600,SERIAL_8N1,22,-1);
+    Serial1.setRxBufferSize(SERIAL_SIZE_RX);
     SerialBT.begin(chipname);
     GPS.setTaskName("GPS");
     GPS.setTaskPriority(2);
@@ -67,15 +70,15 @@ void setup() {
 
 void loop() {
     GPS.upDate();
-    Lat = GPS.s_GNRMC.Latitude;
-    Lon = GPS.s_GNRMC.Longitude;
-    Utc = GPS.s_GNRMC.Utc;
+    Lat = GPS.s_RMC.Latitude;
+    Lon = GPS.s_RMC.Longitude;
+    Utc = GPS.s_RMC.Utc;
     SerialBT.printf("Latitude= %.5f \r\n",Lat);
     SerialBT.printf("Longitude= %.5f \r\n",Lon);
-    SerialBT.printf("DATA= %s \r\n",Utc);
+    SerialBT.printf("DATE= %s \r\n",Utc.c_str());
     Serial.printf("Latitude= %.5f \r\n",Lat);
     Serial.printf("Longitude= %.5f \r\n",Lon);
-    Serial.printf("DATA= %s \r\n",Utc);
+    Serial.printf("DATE= %s \r\n",Utc.c_str());
     writeLog(filename);
     delay(1000);
 }
