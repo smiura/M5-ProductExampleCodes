@@ -8,7 +8,7 @@
 
 //#define DEBUG_GPS
 
-typedef struct GNRMC
+typedef struct RMC
 {
     String pamstr[13];  
     String Utc;         //1
@@ -24,10 +24,10 @@ typedef struct GNRMC
     char Declination;    //11
     int mode;           //12
     String Sum;
-}GNRMC_t;
+}RMC_t;
 
 
-typedef struct GNGSA
+typedef struct GSA
 {
     String pamstr[50];
     char mode2;
@@ -38,7 +38,7 @@ typedef struct GNGSA
     float VDOP;
     String Sum;
 
-}GNGSA_t;
+}GSA_t;
 
 typedef struct GPSSatellite
 {
@@ -49,7 +49,7 @@ typedef struct GPSSatellite
     int SNR;
 }GPSSatellite_t;
 
-typedef struct GPGSV
+typedef struct GSV
 {
     String pamstr[128];
     int size;
@@ -57,7 +57,7 @@ typedef struct GPGSV
     int SatelliteSize;
     GPSSatellite_t Satellite[32];
     String sum;
-}GPGSV_t;
+}GSV_t;
 
 /*
 typedef struct GPGGA
@@ -87,15 +87,15 @@ private:
 
     void Analyse();
 
-    void AnaGPRMC(String str);
-    void AnaGNGAS(String str);
-    void AnaGPGSV(String str);
+    void AnaRMC(String str);
+    void AnaGAS(String str);
+    void AnaGSV(String str);
 
     void run(void *data);
 
-    GNRMC_t _s_GNRMC;
-    GNGSA_t _s_GNGAS;
-    GPGSV_t _s_GPGSV;
+    RMC_t _s_RMC;
+    GSA_t _s_GAS;
+    GSV_t _s_GSV;
 
 public:
     GPSAnalyse();
@@ -104,9 +104,9 @@ public:
     void upDate();
 
 
-    GNRMC_t s_GNRMC;
-    GNGSA_t s_GNGAS;
-    GPGSV_t s_GPGSV;
+    RMC_t s_RMC;
+    GSA_t s_GAS;
+    GSV_t s_GSV;
 };
 
 
